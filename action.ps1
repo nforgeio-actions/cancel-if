@@ -34,15 +34,8 @@ try
 {
     # Fetch the inputs
 
-    $queuedMinutesExceeded = Get-ActionInput "queued-minutes-exceeded" $false
-
-    if ([System.String]::IsNullOrEmpty($queuedMinutesExceeded))
-    {
-        return;     # No constraint to enforce
-    }
-
-    $maxQueuedMinutes = [System.Int32]::Parse($queuedMinutesExceeded)
-    $minCreatedAtUtc  = [System.DateTime]::UtcNow - [System.TimeSpan]::FromMinutes($maxQueuedMinutes)
+    $queuedMinutesExceeded = Get-ActionInputInt32 "queued-minutes-exceeded" $false
+    $minCreatedAtUtc       = [System.DateTime]::UtcNow - [System.TimeSpan]::FromMinutes($queuedMinutesExceeded)
 
     # Fetch the GITHUB_PAT and query the GitHub REST API for the RunAsAdministrator
     # information, specifically the [created_at] property.
